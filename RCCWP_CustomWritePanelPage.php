@@ -62,9 +62,32 @@ class RCCWP_CustomWritePanelPage
 					}
 				</script>
 				<!-- END :: Javascript for Image/Photo' Css Class -->
+				<?php
+				
+				/* To use with EasyPostTypes Plugin > */
+				global $ept_cf;
+				if( isset( $ept_cf ) ) {
+					$contentTypes = $ept_cf->fields_info['types'];
+					//echo '<pre>'.print_r( $contentTypes, true ).'</pre>';
+					foreach( $contentTypes as $ctype => $coptions ) {
+				?>
+				<input type="radio" name="radPostPage" id="radPostPage" value="<?php echo $ctype;?>" <?php if( !empty($customWritePanelType)  && $customWritePanelType == $ctype){?> checked="checked" <?php } ?> onclick='showHide("mf_forpost", "mf_forpage");' /> <strong><?php _e($coptions['singular_label'], $mf_domain); ?> </strong> &nbsp; &nbsp; &nbsp;
+				<?php
+					}
+				?>
+				<input type="radio" name="radPostPage" id="radPostPage" value="post" <?php if(!empty($customWritePanelType)  && $customWritePanelType == 'post'){?> checked="checked" <?php } ?> onclick='showHide("mf_forpost", "mf_forpage");' /> <strong><?php _e('Post', $mf_domain); ?> </strong> &nbsp; &nbsp; &nbsp; 
+				<input type="radio" name="radPostPage" id="radPostPage" value="page" <?php if(!empty($customWritePanelType)  && $customWritePanelType == 'page'){?> checked="checked" <?php } ?> onclick='showHide("mf_forpage", "mf_forpost");' /> <strong><?php _e('Page', $mf_domain); ?></strong>
+<?php
+				}else {
+				echo '<pre>'.print_r( $customWritePanel, true ).'</pre>';
+				
+				?>
 				<input type="radio" name="radPostPage" id="radPostPage" value="post" <?php if(empty($custoWritePanelType) || $customWritePanelType == 'post'){?> checked="checked" <?php } ?> onclick='showHide("mf_forpost", "mf_forpage");' /> <strong><?php _e('Post', $mf_domain); ?> </strong> &nbsp; &nbsp; &nbsp; 
 				<input type="radio" name="radPostPage" id="radPostPage" value="page" <?php if(!empty($customWritePanelType)  && $customWritePanelType == 'page'){?> checked="checked" <?php } ?> onclick='showHide("mf_forpage", "mf_forpost");' /> <strong><?php _e('Page', $mf_domain); ?></strong>
-			</td>
+<?php
+				}
+				/* < To use with EasyPostTypes Plugin */
+?>			</td>
 		</tr>
 
 

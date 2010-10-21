@@ -183,6 +183,30 @@ class RCCWP_CustomWritePanel
 		
 		return $results;
 	}
+	function GetByPostType() {
+		/* To use with EasyPostTypes Plugin > */
+		global $wpdb;
+		
+		$post_type = NULL;
+		if( isset( $_GET['post']) && !empty( $_GET['post'] ) ) {
+			$post = get_post( $_GET['post'], OBJECT );
+			$post_type = $post->post_type;
+		}elseif( isset( $_GET['post_type']) && !empty( $_GET['post_type']) ) {
+			$post_type = $_GET['post_type'];
+		}
+		
+		if( !empty( $post_type) ) {
+			$sql = "SELECT id, name, description, display_order, capability_name, type,single FROM " . MF_TABLE_PANELS .
+				" WHERE type = '$post_type'";
+			
+			$cresults = $wpdb->get_row($sql);
+			return $cresults;
+		}else {
+			return NULL;
+		}
+		/* < To use with EasyPostTypes Plugin */
+
+	}
 	
 	/**
 	 * Gets a write panel id based on write panel name.

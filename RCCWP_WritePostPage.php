@@ -1697,7 +1697,17 @@ if( isset( $customField->properties['strict-max-length'] ) && $customField->prop
 
   function CreateAttributesBox() {
     global $mf_domain;
-  
+    
+    /* To use with EasyPostTypes Plugin > */
+//	global $ept_cf;
+//	if( isset( $ept_cf ) ) {
+//		$contentTypes = $ept_cf->fields_info['types'];
+//		foreach( $contentTypes as $ctype => $coptions ) {
+//			add_meta_box('mfattributespage', __('Magic Fields Attributes',$mf_domain), array('RCCWP_WritePostPage','attributesBoxContentPage'), $ctype, 'side', 'core');
+//		}
+//	}
+	/* < To use with EasyPostTypes Plugin */
+	
     add_meta_box('mfattributespage', __('Magic Fields Attributes',$mf_domain), array('RCCWP_WritePostPage','attributesBoxContentPage'), 'page', 'side', 'core');
     add_meta_box('mfattributespost', __('Magic Fields Attributes',$mf_domain), array('RCCWP_WritePostPage','attributesBoxContentPost'), 'post', 'side', 'core');
   }
