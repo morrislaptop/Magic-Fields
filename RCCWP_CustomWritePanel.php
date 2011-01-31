@@ -196,7 +196,7 @@ class RCCWP_CustomWritePanel
 			$post_type = $_GET['post_type'];
 		}
 		
-		if( !empty( $post_type) ) {
+		if( !empty( $post_type)  && $post_type != 'page' && $post_type != 'post' ) {
 			$sql = "SELECT id, name, description, display_order, capability_name, type,single FROM " . MF_TABLE_PANELS .
 				" WHERE type = '$post_type'";
 			
