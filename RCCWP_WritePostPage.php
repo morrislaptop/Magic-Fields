@@ -1735,22 +1735,80 @@ if( isset( $customField->properties['strict-max-length'] ) && $customField->prop
   function CreateAttributesBox() {
     global $mf_domain;
     
-    /* To use with EasyPostTypes Plugin > */
-//	global $ept_cf;
-//	if( isset( $ept_cf ) ) {
-//		$contentTypes = $ept_cf->fields_info['types'];
-//		foreach( $contentTypes as $ctype => $coptions ) {
-//			add_meta_box('mfattributespage', __('Magic Fields Attributes',$mf_domain), array('RCCWP_WritePostPage','attributesBoxContentPage'), $ctype, 'side', 'core');
-//		}
-//	}
-	/* < To use with EasyPostTypes Plugin */
+    /* To use with Custom Post Types > */
+    $post_types = array();
+	$post_types = get_post_types(array('_builtin'=>false), 'objects');
+	
+	if( !empty( $post_types )) {
+		foreach( $post_types as $ctype => &$coptions) {
+			add_meta_box('mfattributespage', __('Magic Fields Attributes',$mf_domain), array('RCCWP_WritePostPage','attributesBoxContentCustomPostType'), $ctype, 'side', 'core');
+		}
+	}
+	/* To use with Custom Post Types > */
 	
     add_meta_box('mfattributespage', __('Magic Fields Attributes',$mf_domain), array('RCCWP_WritePostPage','attributesBoxContentPage'), 'page', 'side', 'core');
     add_meta_box('mfattributespost', __('Magic Fields Attributes',$mf_domain), array('RCCWP_WritePostPage','attributesBoxContentPost'), 'post', 'side', 'core');
   }
+	
+	
+	/*
+	 * Duplicated function attributesBoxContentPost(), probably needs revision, but since it's just a test, it's OK for now.
+	 *
+	 */
+	function attributesBoxContentCustomPostType($post) {
+		
+		global $wpdb;
+    
+		$single_panel = FALSE;
+		
+		$panel_id = get_post_meta($post->ID, "_mf_write_panel_id", TRUE);
+		
+		if ($panel_id) {
+			$panel =  RCCWP_CustomWritePanel::Get($panel_id);
+		}
+
+//		Filter post type
+	    $post_type = NULL;
+		if( isset( $_GET['post']) && !empty( $_GET['post'] ) ) {
+			$post = get_post( $_GET['post'], OBJECT );
+			$post_type = $post->post_type;
+		}elseif( isset( $_GET['post_type']) && !empty( $_GET['post_type']) ) {
+			$post_type = $_GET['post_type'];
+		}
+?>	<p><strong><?php _e('Write Panel') ?></strong></p>
+	<label class="screen-reader-text" for="parent_id"><?php _e('Write Panel') ?></label>
+<?php 
   
-  
-  
+		// get a list of the write panels 
+		$customWritePanels = RCCWP_CustomWritePanel::GetCustomWritePanels();
+		
+?>	<select name="rc-cwp-change-custom-write-panel-id" id="rc-cwp-change-custom-write-panel-id">
+		<option value="-1"><?php _e('(None)', $mf_domain); ?></option>
+<?php	$items = array();
+		
+		foreach ($customWritePanels as $panel) :
+			if( $panel->type == $post_type ):echo '<!-- Panel: '.print_r( $panel, true ).'-->';
+				$selected = $panel->id == $panel_id ? 'selected="selected"' : '';
+				$allow = $panel->type == $post_type;
+				
+				if ($panel->single && $panel->id != $panel_id) {
+					// check to see if there are any posts with this panel already. If so, we can't allow it to be used.
+					$sql = "SELECT COUNT(*) FROM $wpdb->postmeta WHERE $wpdb->postmeta.meta_value = ".$panel->id." AND $wpdb->postmeta.meta_key = '_mf_write_panel_id'";
+					$count = $wpdb->get_var($sql);
+					$allow = $count == 0;
+				}
+
+				if ($allow) :  // cannot change to "single" panels
+?>		<option value="<?php echo $panel->id?>" <?php echo $selected?>><?php echo $panel->name?></option>
+<?php
+				endif;
+			endif;
+		endforeach;
+?>	</select>
+<?php
+	
+	}
+	
 
   function attributesBoxContentPage($post) {
     

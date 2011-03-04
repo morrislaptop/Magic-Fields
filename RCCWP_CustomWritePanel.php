@@ -184,8 +184,12 @@ class RCCWP_CustomWritePanel
 		
 		return $results;
 	}
+	
+	/**
+	 * Get the write panel by the current post type
+	 *
+	 */
 	function GetByPostType() {
-		/* To use with EasyPostTypes Plugin > */
 		global $wpdb;
 		
 		$post_type = NULL;
@@ -205,8 +209,6 @@ class RCCWP_CustomWritePanel
 		}else {
 			return NULL;
 		}
-		/* < To use with EasyPostTypes Plugin */
-
 	}
 	
 	/**

@@ -211,13 +211,13 @@ class RCCWP_Post {
 			include_once('RCCWP_Application.php');
 			$customWritePanel = RCCWP_CustomWritePanel::Get($customWritePanelId);
 		}
-		/* To use with EasyPostTypes Plugin > */
+		// Patch to use MF with Custom Post Types >
 		// Try to get $customWritePanel by post_type
 		if( empty($customWritePanel)) {
 			include_once('RCCWP_Application.php');
 			$customWritePanel = RCCWP_CustomWritePanel::GetByPostType($customWritePanelId);
 		}
-		/* < To use with EasyPostTypes Plugin */
+		// < Patch to use MF with Custom Post Types
 
 		return $customWritePanel;
 	}
