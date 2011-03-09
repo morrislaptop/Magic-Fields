@@ -334,7 +334,7 @@ class RCCWP_Menu
 							add_submenu_page($base+$offset.'.php', __($panel->name), $new_indicator_text, $requiredPostsCap, 'post-new.php?custom-write-panel-id=' . $panel->id);
 							
 						}
-					}else{
+					}elseif ($panel->type == "page"){
 						if($panel->single == 1){ //if the page is single
 							if($add_post){ //if the page is single and don't have any related post
 								add_submenu_page($base+$offset.'.php', __($panel->name), $new_indicator_text, $requiredPagesCap, $page_new.'custom-write-panel-id=' . $panel->id);
@@ -355,7 +355,7 @@ class RCCWP_Menu
 			 			}else{
 			 				add_submenu_page('post-new.php', __($panel->name), __($panel->name), $requiredPostsCap, 'post-new.php?custom-write-panel-id=' . $panel->id);
 			 			}
-					}else {
+					}elseif ($panel->type == "page"){
 			 			if($panel->single == 1){ //if the page is single
 			 				if($add_post){ //if the page is single and don't have any related post
 			 					add_submenu_page('page-new.php', __($panel->name), __($panel->name), $requiredPagesCap, $page_new.'custom-write-panel-id=' . $panel->id);
