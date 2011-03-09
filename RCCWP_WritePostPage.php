@@ -879,7 +879,8 @@ class RCCWP_WritePostPage  {
       add_filter('posts_where', array('RCCWP_Query','ExcludeWritepanelsPosts'));
     }
 		else{
-			$options=get_posts("post_type=any&meta_key=_mf_write_panel_id&numberposts=-1&meta_value=$panel_id&order=ASC&orderby=title");
+			$writePanel = RCCWP_CustomWritePanel::Get($panel_id);
+			$options=get_posts("post_type=$writePanel->type&meta_key=_mf_write_panel_id&numberposts=-1&meta_value=$panel_id&order=ASC&orderby=title");
 		}
 		
 		$last_panel_name = ""; // traversal (for grouping)
