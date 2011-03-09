@@ -84,7 +84,7 @@ class RCCWP_CustomWritePanelPage
 				}
 				
 				?>
-				<input type="radio" name="radPostPage" id="radPostPage" value="post" <?php if(empty($custoWritePanelType) || $customWritePanelType == 'post'){?> checked="checked" <?php } ?> onclick='showHide("mf_forpost", "mf_forpage");' /> <strong><?php _e('Post', $mf_domain); ?> </strong> &nbsp; &nbsp; &nbsp; 
+				<input type="radio" name="radPostPage" id="radPostPage" value="post" <?php if(empty($customWritePanelType) || $customWritePanelType == 'post'){?> checked="checked" <?php } ?> onclick='showHide("mf_forpost", "mf_forpage");' /> <strong><?php _e('Post', $mf_domain); ?> </strong> &nbsp; &nbsp; &nbsp; 
 				<input type="radio" name="radPostPage" id="radPostPage" value="page" <?php if(!empty($customWritePanelType)  && $customWritePanelType == 'page'){?> checked="checked" <?php } ?> onclick='showHide("mf_forpage", "mf_forpost");' /> <strong><?php _e('Page', $mf_domain); ?></strong>
 			</td>
 		</tr>
