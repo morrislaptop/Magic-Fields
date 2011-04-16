@@ -851,15 +851,15 @@ class RCCWP_WritePostPage  {
     $pn_cache = array(); // setup a panel name cache (so we only look up the panel name ONCe for each panel ID)
     
 		if($panel_id == -4){
-			$options=get_posts("post_type=post&numberposts=-1&order=ASC&orderby=title");
+			$options=get_posts("post_type=post&numberposts=-1&order=ASC&orderby=title&fields=ids");
 		}elseif($panel_id == -3){
-			$options=get_posts("post_type=page&numberposts=-1&order=ASC&orderby=title");
+			$options=get_posts("post_type=page&numberposts=-1&order=ASC&orderby=title&fields=ids");
 		}elseif($panel_id == -2){
-				$options=get_posts("post_type=post&meta_key=_mf_write_panel_id&numberposts=-1&order=ASC&orderby=title");
+				$options=get_posts("post_type=post&meta_key=_mf_write_panel_id&numberposts=-1&order=ASC&orderby=title&fields=ids");
 		}elseif($panel_id == -1){
-					$options=get_posts("post_type=page&meta_key=_mf_write_panel_id&numberposts=-1&order=ASC&orderby=title");
+					$options=get_posts("post_type=page&meta_key=_mf_write_panel_id&numberposts=-1&order=ASC&orderby=title&fields=ids");
 		}elseif($panel_id == -6){
-			$options=get_posts("post_type=any&numberposts=-1");
+			$options=get_posts("post_type=any&numberposts=-1&fields=ids");
     }elseif($panel_id == -5){
       
       remove_filter('posts_where', array('RCCWP_Query','ExcludeWritepanelsPosts'));
@@ -880,8 +880,14 @@ class RCCWP_WritePostPage  {
     }
 		else{
 			$writePanel = RCCWP_CustomWritePanel::Get($panel_id);
-			$options=get_posts("post_type=$writePanel->type&meta_key=_mf_write_panel_id&numberposts=-1&meta_value=$panel_id&order=ASC&orderby=title");
+			$options=get_posts("post_type=$writePanel->type&meta_key=_mf_write_panel_id&numberposts=-1&meta_value=$panel_id&order=ASC&orderby=title&fields=ids");
 		}
+		
+		foreach( $options as &$option ) {
+			$val = $option;
+			$option = new stdClass;
+			$option->ID = $val;
+		}unset($val);
 		
 		$last_panel_name = ""; // traversal (for grouping)
 
@@ -935,7 +941,7 @@ class RCCWP_WritePostPage  {
       
 			$selected = $option->ID == $value ? 'selected="selected"' : '';
 		?>
-			<option value="<?php echo $option->ID ?>" <?php echo $selected?>><?php echo $display_panel_name.$option->post_title ?></option><!-- TRAVERSAL UPDATE, adds display panel name as prefix -->
+			<option value="<?php echo $option->ID ?>" <?php echo $selected?>><?php echo $display_panel_name.get_the_title( $option->ID) ?></option><!-- TRAVERSAL UPDATE, adds display panel name as prefix -->
 		<?php
 		endforeach;
 
