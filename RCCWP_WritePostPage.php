@@ -339,7 +339,7 @@ class RCCWP_WritePostPage  {
 			}
 			
 			if($group->name == "__default"){
-				$name = "Magic Fields Custom Fields";
+				$name = $CUSTOM_WRITE_PANEL->name. " Custom Fields";
 			}else{
 				$name = $group->name;
 			}	
