@@ -133,7 +133,7 @@ class RCCWP_Processor {
          }
 
 
-				$exportedFilename = $tmpPath = $tmp_dir.$writePanel->name . '.pnl';
+				$exportedFilename = $tmpPath = rtrim( $tmp_dir, '/' ).'/'.$writePanel->name . '.pnl';
 
 				
 				RCCWP_CustomWritePanel::Export($panelID, $exportedFilename);
