@@ -19,6 +19,7 @@ class RCCWP_CustomWritePanelPage
 		$customThemePage = NULL;
 		$showPost = true;
 		$customParentPage = NULL;
+		$customWritePanelCategoryIds = NULL;
 		if ($customWritePanel != null)
 		{
 			$customWritePanelName = $customWritePanel->name;
@@ -28,6 +29,12 @@ class RCCWP_CustomWritePanelPage
 			$customWritePanelType = $customWritePanel->type;
 			if ($customWritePanelType == 'page') $showPost = false;
 			$customWritePanelCategoryIds = RCCWP_CustomWritePanel::GetAssignedCategoryIds($customWritePanel->id);
+                        foreach($customWritePanelCategoryIds as $key => $c ){
+                          if((int)$c != 0){
+                            $tc = get_category($c);
+                            $customWritePanelCategoryIds[$key] = $tc->slug;
+                          }
+                        }
 			$customWritePanelStandardFieldIds = RCCWP_CustomWritePanel::GetStandardFields($customWritePanel->id);
 			$customWritePanelAllFieldIds = RCCWP_CustomWritePanel::Get($customWritePanel->id);
 			
@@ -36,6 +43,8 @@ class RCCWP_CustomWritePanelPage
 				$customParentPage = RCCWP_CustomWritePanel::GetParentPage($customWritePanel->name);
 			}
 			$defaultTagChecked = '';
+
+                        
 			?>
 			<input type="hidden" name="custom-write-panel-id" value="<?php echo $customWritePanel->id?>" />
 			<?php
@@ -68,23 +77,7 @@ class RCCWP_CustomWritePanelPage
 					}
 				</script>
 				<!-- END :: Javascript for Image/Photo' Css Class -->
-				<?php
-				
-				/* To use with Custom Post Types > */
-				$post_types = array();
-				$post_types = get_post_types(array('_builtin'=>false), 'objects');
-				
-//				 If any post types are defined, prepend them to the list 
-				if( !empty( $post_types )) {
-					foreach( $post_types as $ctype => &$coptions) {
-						unset( $coptions->register_meta_box_cb);
-?>				<input type="radio" name="radPostPage" id="radPostPage" value="<?php echo $ctype;?>" <?php if( !empty($customWritePanelType)  && $customWritePanelType == $ctype){?> checked="checked" <?php } ?> onclick='showHide("mf_forpost", "mf_forpage");' /> <strong><?php _e($coptions->singular_label, $mf_domain); ?> </strong> &nbsp; &nbsp; &nbsp;
-<?php
-					}
-				}
-				
-				?>
-				<input type="radio" name="radPostPage" id="radPostPage" value="post" <?php if(empty($customWritePanelType) || $customWritePanelType == 'post'){?> checked="checked" <?php } ?> onclick='showHide("mf_forpost", "mf_forpage");' /> <strong><?php _e('Post', $mf_domain); ?> </strong> &nbsp; &nbsp; &nbsp; 
+				<input type="radio" name="radPostPage" id="radPostPage" value="post" <?php if(empty($custoWritePanelType) || $customWritePanelType == 'post'){?> checked="checked" <?php } ?> onclick='showHide("mf_forpost", "mf_forpage");' /> <strong><?php _e('Post', $mf_domain); ?> </strong> &nbsp; &nbsp; &nbsp; 
 				<input type="radio" name="radPostPage" id="radPostPage" value="page" <?php if(!empty($customWritePanelType)  && $customWritePanelType == 'page'){?> checked="checked" <?php } ?> onclick='showHide("mf_forpage", "mf_forpost");' /> <strong><?php _e('Page', $mf_domain); ?></strong>
 			</td>
 		</tr>
@@ -104,7 +97,7 @@ class RCCWP_CustomWritePanelPage
 				
 				<?php
 				$cats = get_categories( "get=all" );
-				RCCWP_CustomWritePanelPage::PrintNestedCats( &$cats, 0, 0, &$customWritePanelCategoryIds );
+				RCCWP_CustomWritePanelPage::PrintNestedCats( $cats, 0, 0, $customWritePanelCategoryIds );
 				?>
 				
 			</td>
@@ -269,15 +262,15 @@ class RCCWP_CustomWritePanelPage
 	function PrintNestedCats( $cats, $parent = 0, $depth = 0, $customWritePanelCategoryIds ) {
 		foreach ($cats as $cat) : 
 			if( $cat->parent == $parent ) {
-				$checked = "";
-				if (@in_array($cat->cat_ID, $customWritePanelCategoryIds))
+                          $checked = "";
+				if (@in_array($cat->slug, $customWritePanelCategoryIds))
 				{
 					$checked = "checked=\"checked\"";
 				}
 				echo str_repeat('&nbsp;', $depth * 4);
-?>					<input type="checkbox" name="custom-write-panel-categories[]" value="<?php echo $cat->cat_ID?>" <?php echo $checked?> /> <?php echo $cat->cat_name ?> <br/>
+?>					<input type="checkbox" name="custom-write-panel-categories[]" value="<?php echo $cat->slug?>" <?php echo $checked?> /> <?php echo $cat->cat_name ?> <br/>
 <?php				
-			RCCWP_CustomWritePanelPage::PrintNestedCats( &$cats, $cat->term_id, $depth+1, &$customWritePanelCategoryIds );
+			RCCWP_CustomWritePanelPage::PrintNestedCats( $cats, $cat->term_id, $depth+1, $customWritePanelCategoryIds );
 			}
 		endforeach;
 	}				
@@ -398,7 +391,7 @@ class RCCWP_CustomWritePanelPage
 			</p>
 		</form>
     <br class="clear"/>
-    <?php if($_GET['saved_order'] == "true"):?>
+    <?php if(isset($_GET['save_order']) && $_GET['saved_order'] == "true"):?>
       <div id="message" class="updated">
         Saved Order.
       </div>
@@ -436,7 +429,7 @@ class RCCWP_CustomWritePanelPage
 	    <?php endforeach;?>
 		</div>
 		<br />
-    <input type="submit" name="save_submit" id="save_order" />
+    <input type="submit" name="save_submit" value="<?php _e('Save Order',$mf_domain);?>" id="save_order" />
     </form>
 		<?php
 	}
