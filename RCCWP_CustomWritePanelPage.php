@@ -86,8 +86,13 @@ class RCCWP_CustomWritePanelPage
 //				 If any post types are defined, prepend them to the list 
 				if( !empty( $post_types )) {
 					foreach( $post_types as $ctype => &$coptions) {
-						unset( $coptions->register_meta_box_cb);
-?>				<input type="radio" name="radPostPage" id="radPostPage" value="<?php echo $ctype;?>" <?php if( !empty($customWritePanelType)  && $customWritePanelType == $ctype){?> checked="checked" <?php } ?> onclick='showHide("mf_forpost", "mf_forpage");' /> <strong><?php _e($coptions->singular_label, $mf_domain); ?> </strong> &nbsp; &nbsp; &nbsp;
+						$name = (!empty($coptions->labels->singular_name)) ? $coptions->labels->singular_name : $coptions->labels->name;
+						$name = (empty($name) || $name == 'Page' || $name == 'Post' ) ? ucwords( $ctype ) : $name;
+						
+						$show = ($coptions->capability_type == 'page') ? 'page' : 'post';
+						$hide = ($coptions->capability_type == 'page') ? 'post' : 'page';
+						
+?>				<input type="radio" name="radPostPage" id="radPostPage" value="<?php echo $ctype;?>" <?php if( !empty($customWritePanelType)  && $customWritePanelType == $ctype){?> checked="checked" <?php } ?> onclick='showHide("mf_for<?=$show?>", "mf_for<?=$hide?>");' /> <strong><?php _e($name, $mf_domain); ?> </strong> &nbsp; &nbsp; &nbsp;
 <?php
 					}
 				}
