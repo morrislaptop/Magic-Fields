@@ -78,7 +78,8 @@ $FIELD_TYPES = array(
 					'slider' => 13,
 					'related_type' => 14,
 					'markdown_textbox' => 15,
-					'Image (Upload Media)' => 16
+					'Image (Upload Media)' => 16,
+					'related_author' => 100,
 					);
 
 
@@ -215,7 +216,15 @@ $mf_field_types = array(
 		'has_options'			=>	'false',
 		'has_properties'		=>	'true',
 		'allow_multiple_values'	=>	'false' 
-	)
+	),
+	100	=> array(
+		'id'					=> 100,
+		'name'					=> 'Related Author',
+		'description'			=>	'',
+		'has_options'			=>	'false',
+		'has_properties'		=>	'true',
+		'allow_multiple_values'	=>	'false',
+	),
 );
 
 

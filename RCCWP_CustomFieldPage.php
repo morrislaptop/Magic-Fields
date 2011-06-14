@@ -90,7 +90,8 @@ class RCCWP_CustomFieldPage{
 									$FIELD_TYPES['audio'],
 									$FIELD_TYPES['related_type'],
 									$FIELD_TYPES['Image (Upload Media)'],
-									$FIELD_TYPES['markdown_textbox']
+									$FIELD_TYPES['markdown_textbox'],
+									$FIELD_TYPES['related_author'],
 							))){  ?>
 		<tr valign="top">
 			<th scope="row"><?php _e('Required',$mf_domain); ?>:</th>

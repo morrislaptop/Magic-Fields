@@ -287,6 +287,7 @@ function smartTrim(string, maxLength) {
               break;
             }
             case "related-type" :
+            case "related-author" :
             case "dropdown-list" : {
               var sel = f.find("select");
               var val = sel.val();

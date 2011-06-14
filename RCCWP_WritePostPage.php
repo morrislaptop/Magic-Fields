@@ -696,12 +696,15 @@ class RCCWP_WritePostPage  {
 					case 'Related Type' :
 						RCCWP_WritePostPage::RelatedTypeInterface($customField, $inputName, $groupCounter, $fieldCounter);
 						break;
-				  case 'Markdown Textbox' :
-  					RCCWP_WritePostPage::MarkdownTextboxInterface($customField, $inputName, $groupCounter, $fieldCounter);
-  					break;
-  				case 'Image (Upload Media)' :
-    				RCCWP_WritePostPage::MediaPhotoInterface($customField, $inputName, $groupCounter, $fieldCounter);
-            break;
+					case 'Markdown Textbox' :
+	  					RCCWP_WritePostPage::MarkdownTextboxInterface($customField, $inputName, $groupCounter, $fieldCounter);
+	  					break;
+	  				case 'Image (Upload Media)' :
+	    				RCCWP_WritePostPage::MediaPhotoInterface($customField, $inputName, $groupCounter, $fieldCounter);
+			            break;
+			        case 'Related Author' :
+	    				RCCWP_WritePostPage::RelatedAuthorInterface($customField, $inputName, $groupCounter, $fieldCounter);
+	    				break;
 					default:
 						;
 				}
@@ -839,6 +842,65 @@ class RCCWP_WritePostPage  {
 	}
 	
 	
+	function RelatedAuthorInterface($customField, $inputName, $groupCounter, $fieldCounter) {
+		global $mf_domain, $wpdb, $current_user;
+		// Post ID
+		$mf_post_id =  apply_filters('mf_source_post_data', $_REQUEST['post']);
+		
+		//get id of related type / panel
+		$panel_id = (int)$customField->properties['panel_id'];
+		
+		//is required ?
+		$requiredClass = ($customField->required_field) ? "field_required" : '';
+		
+		$customFieldId = '';
+		// Get the field value
+		if (isset($mf_post_id)) {
+			$customFieldId = $customField->id;
+			$value = attribute_escape(RCCWP_CustomField::GetCustomFieldValues(true, $mf_post_id, $customField->name, $groupCounter, $fieldCounter));
+			if( empty( $value ) ) {
+				$value = $current_user->ID;			
+			}
+		}else {
+			$value = $current_user->ID;
+		}
+		
+		$users = array();
+		if( $current_user->user_level == 10 ) {
+			$users = get_users( array( 'fields' => 'ID' ) );
+		}else {
+			$users[] = $value;
+		}
+?><div class="mf_custom_field">
+	<select tabindex="3"<?php if( sizeof( $users == 1) ) echo ' disabled="disabled"'; if ($customField->required_field) echo ' validate="required:true"'; ?> class="<?php echo $requiredClass;?> listbox_mf" name="<?php echo $inputName?>">
+<?php
+		foreach( $users as $user_value ) {
+			$selected = $user_value == $value ? ' selected="selected"' : '';
+?>		<option value="<?php echo $user_value?>"<?php echo $selected?>><?php
+		
+			if( $user = get_userdata($user_value) ) {
+			}elseif( $user = get_userdata( $current_user->ID ) ) {
+			}else {
+				wp_die( 'Cannot get user data, this should not happen. Please write me at: <a href="mailto:martin@attitude.sk" title="Write me">martin@attitude.sk</a> and please provide as much info as possible.', 'Please report problem.' );
+			}
+		
+			$name = '';
+			$name.= ( !empty( $user->first_name ) ) ? $user->first_name : '';
+			$name.= ( !empty( $user->last_name ) ) ? ' '.$user->last_name : '';
+			$name = ( !empty( $name ) ) ? $name : ucwords( $user->user_nicename );
+			$name = ( !empty( $name ) ) ? $name : ucwords( $user->user_login );
+			echo $name;
+?></option>
+<?php
+		}
+?>	</select>
+</div>
+<?php
+		if ($customField->required_field){
+?><div class="mf_message_error"><label for="<?php echo $inputName?>" class="error_magicfields error"><?php _e("This field is required",$mf_domain)?></label></div>
+<?php
+		}		
+	}
 
 
 	//eeble
