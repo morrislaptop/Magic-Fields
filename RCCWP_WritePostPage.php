@@ -872,7 +872,7 @@ class RCCWP_WritePostPage  {
 			$users[] = $value;
 		}
 ?><div class="mf_custom_field">
-	<select tabindex="3"<?php if( sizeof( $users == 1) ) echo ' disabled="disabled"'; if ($customField->required_field) echo ' validate="required:true"'; ?> class="<?php echo $requiredClass;?> listbox_mf" name="<?php echo $inputName?>">
+	<select tabindex="3"<?php if( sizeof( $users) == 1 ) echo ' disabled="disabled"'; if ($customField->required_field) echo ' validate="required:true"'; ?> class="<?php echo $requiredClass;?> listbox_mf" name="<?php echo $inputName?>">
 <?php
 		foreach( $users as $user_value ) {
 			$selected = $user_value == $value ? ' selected="selected"' : '';
