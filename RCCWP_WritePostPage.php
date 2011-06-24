@@ -1027,13 +1027,13 @@ class RCCWP_WritePostPage  {
                   if( $panel_id == -7 ) {
                     $selected = $option->term_id == $value ? 'selected="selected"' : '';
                     ?>
-                    <option value="<?php echo $option->term_id ?>" <?php echo $selected?>><?php echo $display_panel_name.$option->name ?></option><!-- TRAVERSAL UPDATE, adds display panel name as prefix -->
+                    <option value="<?php echo $option->term_id ?>" <?php echo $selected?>><?php echo $display_panel_name.' '.get_the_title($option->ID) ?></option><!-- TRAVERSAL UPDATE, adds display panel name as prefix -->
                        <?php      
                        }else {
       
                     $selected = $option->ID == $value ? 'selected="selected"' : '';
                     ?>
-                    <option value="<?php echo $option->ID ?>" <?php echo $selected?>><?php echo $display_panel_name.$option->post_title ?></option><!-- TRAVERSAL UPDATE, adds display panel name as prefix -->
+                    <option value="<?php echo $option->ID ?>" <?php echo $selected?>><?php echo $display_panel_name.' '.get_the_title($option->ID) ?></option><!-- TRAVERSAL UPDATE, adds display panel name as prefix -->
                        <?php
                        }
 		endforeach;
