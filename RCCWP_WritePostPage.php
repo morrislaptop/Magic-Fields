@@ -977,7 +977,7 @@ class RCCWP_WritePostPage  {
 		
 		$last_panel_name = ""; // traversal (for grouping)
 
-		foreach ($options as $option) :
+		foreach ($options as &$option) :
 
   /* TRAVERSAL ADDITION - Adds grouping of related type fields when all write panels are listed -- */
       $panel_name = "";
