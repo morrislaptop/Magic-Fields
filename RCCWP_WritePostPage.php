@@ -865,15 +865,15 @@ class RCCWP_WritePostPage  {
 		}else {
 			$value = $current_user->ID;
 		}
-		
 		$users = array();
 		if( $current_user->user_level == 10 ) {
 			$users = get_users( array( 'fields' => 'ID' ) );
 		}else {
 			$users[] = $value;
 		}
+		
 ?><div class="mf_custom_field">
-	<select tabindex="3"<?php if( sizeof( $users) == 1 ) echo ' disabled="disabled"'; if ($customField->required_field) echo ' validate="required:true"'; ?> class="<?php echo $requiredClass;?> listbox_mf" name="<?php echo $inputName?>">
+	<select tabindex="3"<?php if( sizeof( $users ) == 1 ) echo ' disabled="disabled"'; if ($customField->required_field) echo ' validate="required:true"'; ?> class="<?php echo $requiredClass;?> listbox_mf" <?php if( sizeof( $users ) > 1 ) { ?>name="<?php echo $inputName?>"<?php } ?>>
 <?php
 		foreach( $users as $user_value ) {
 			$selected = $user_value == $value ? ' selected="selected"' : '';
@@ -895,7 +895,12 @@ class RCCWP_WritePostPage  {
 <?php
 		}
 ?>	</select>
-</div>
+<?php
+	if( sizeof( $users ) == 1 ) {
+		echo '<input name="'.$inputName.'" type="hidden" value="'.$user_value.'" />';
+	}
+	
+?></div>
 <?php
 		if ($customField->required_field){
 ?><div class="mf_message_error"><label for="<?php echo $inputName?>" class="error_magicfields error"><?php _e("This field is required",$mf_domain)?></label></div>

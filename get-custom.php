@@ -581,6 +581,7 @@ function get_group($name_group,$post_id=NULL){
 	foreach($data_groups as $data){
 		switch($data->type){
 			case $FIELD_TYPES["textbox"]:
+			case $FIELD_TYPES["related_author"]:
 			case $FIELD_TYPES["radiobutton_list"]:
 			case $FIELD_TYPES["dropdown_list"]:
 			case $FIELD_TYPES["color_picker"]:
@@ -674,6 +675,7 @@ function get_field_duplicate($fieldName, $groupIndex=1,$post_id=NULL){
 	foreach($data_fields as $data){
 		switch($data->type){
 			case $FIELD_TYPES["textbox"]:
+			case $FIELD_TYPES["related_author"]:
 			case $FIELD_TYPES["radiobutton_list"]:
 			case $FIELD_TYPES["dropdown_list"]:
 			case $FIELD_TYPES["color_picker"]:
@@ -754,6 +756,7 @@ function get_clean_field_duplicate($fieldName, $groupIndex=1,$post_id=NULL){
 	foreach($data_fields as $data){
 		switch($data->type){
 			case $FIELD_TYPES["textbox"]:
+			case $FIELD_TYPES["related_author"]:
 			case $FIELD_TYPES["radiobutton_list"]:
 			case $FIELD_TYPES["dropdown_list"]:
 			case $FIELD_TYPES["color_picker"]:
