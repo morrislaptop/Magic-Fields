@@ -482,7 +482,7 @@ class RCCWP_WritePostPage  {
 
     if ($customGroup->name == "__default") {
       // for the default group (top level), check the expand flag on the WRITE PANEL instead
-      $ex_class = $CUSTOM_WRITE_PANEL->expanded ? "mf-group-expanded" : '';
+      $ex_class = !empty($CUSTOM_WRITE_PANEL->expanded) ? "mf-group-expanded" : '';
     }
     
     $mf_post_id =  (isset($_REQUEST['post'])) ? apply_filters('mf_source_post_data', $_REQUEST['post']) : null;
@@ -1918,7 +1918,7 @@ if( isset( $customField->properties['strict-max-length'] ) && $customField->prop
 
   function attributesBoxContentPage($post) {
     
-    global $wpdb;
+    global $wpdb, $mf_domain;
     
     $single_panel = FALSE;
     $panel_id = get_post_meta($post->ID, "_mf_write_panel_id", TRUE);

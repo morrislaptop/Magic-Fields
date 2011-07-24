@@ -165,6 +165,7 @@ class RCCWP_Post {
 	function GetCustomWritePanel()
 	{
 	    global $wpdb;
+	    $customWritePanelId = null;
 		
 		if (isset($_GET['post']))
 		{
