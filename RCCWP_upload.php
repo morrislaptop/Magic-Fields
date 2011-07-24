@@ -65,14 +65,21 @@ if (isset($_POST['fileframe'])){
 			$special_chars = array (' ','`','"','\'','\\','/'," ","#","$","%","^","&","*","!","~","‘","\"","’","'","=","?","/","[","]","(",")","|","<",">",";","\\",",","+","-");
 			$filename = str_replace($special_chars,'',$_FILES['file']['name']);
 			$filename = time() . $filename;
+
+      $action_mf_file = $_FILES['file'];
+
 			@move_uploaded_file( $_FILES['file']['tmp_name'], MF_FILES_PATH . $filename );
 			@chmod(MF_FILES_PATH . $filename, 0644);
+    
 
 		  $result_msg = '<span class="mf-upload-success">'.__("Successful upload",$mf_domain).'!</span>' ;
 			
 			//Checking the mimetype of the file
 			if(valid_mime($_FILES['file']['type'],$acceptedExts)){
 				$operationSuccess = "true";
+
+        $action_mf_file['tmp_name'] = MF_FILES_PATH . $filename;
+        do_action( 'mf_after_upload_file', $action_mf_file );
 			}else{
 				$operationSuccess = "false";
 				
@@ -130,7 +137,13 @@ if (isset($_POST['fileframe'])){
 			par.getElementById("<?php echo $idField; ?>").value = "<?php echo $filename?>";
 			//Set image
 			<?php
-				$newImagePath = PHPTHUMB.'?&w=150&h=120&src='.MF_FILES_URI.$filename;
+		    //$newImagePath = PHPTHUMB.'?&w=150&h=120&src='.MF_FILES_URI.$filename;
+
+        if($acceptedExts == "image") {
+          $newImagePath = aux_image($filename,'w=150&h=120&zc=1');
+        }else{
+          $newImagePath = "";
+        }
 				
 				if (isset($_POST['imageThumbID'])){ 
 			?>
@@ -245,7 +258,7 @@ label.label-file {
 				<input id="file" type="file" name="file" onchange="upload()" size="<?php echo $inputSize; ?>" class="mf-file" /></td>
 			<?php }else{ ?>
 				<td width=17%><label for="file" class="label-file"><?php _e('File', $mf_domain); ?>:</label></td>
-				<td><input id="file" type="file" name="file" onchange="upload()" size="<?php echo $inputSize; ?>" class="mf-file" /></td>
+				<td><input id="file" type="file" name="file" onchange="upload()" class="mf-file" /></td>
 			<?php } ?>
 		</tr>
 

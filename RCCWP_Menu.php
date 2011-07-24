@@ -319,7 +319,7 @@ class RCCWP_Menu
 				//IF we has unactivated the condenced menu
 				if(!$condence){
 					//adding the top parent menus
-					$new_menu[$base+$offset] = array( __($panel->name), $type_write_panel, $base+$offset.'.php', '', 'mf-menu-'.sanitize_title_with_dashes($panel->name). ' wp-menu-open menu-top mf-menu-'.$type_write_panel, 'mf-menu-'.$panel->id, 'div');
+					$new_menu[$base+$offset] = array( __($panel->name), $type_write_panel, $base+$offset.'.php', '', 'mf-menu-'.sanitize_title_with_dashes($panel->name). ' menu-top mf-menu-'.$type_write_panel, 'mf-menu-'.$panel->id, 'div');
 					
 					//adding submenu options (add new and manage for each write panel)
 					if ($panel->type == "post"){
@@ -373,7 +373,10 @@ class RCCWP_Menu
 		foreach ($menu as $k => $v) {
 			if($k > 5) $new_menu[$k+$offset]=$v;
 		}
-			
+
+                global $_wp_last_utility_menu;
+                $_wp_last_utility_menu += $offset;
+
 		$menu = $new_menu;
 		RCCWP_Menu::SetCurrentCustomWritePanelMenuItem();
 		
@@ -467,8 +470,9 @@ class RCCWP_Menu
 	
 	function FilterPostsPagesListJoin($join){
 		global $wpdb;
+    
 		if (isset($_GET['filter-posts'])) {
-		  $join = " JOIN $wpdb->postmeta ON $wpdb->postmeta.post_id = $wpdb->posts.ID ";
+		  $join .= " JOIN $wpdb->postmeta ON $wpdb->postmeta.post_id = $wpdb->posts.ID ";
 	  }
 		return $join;
 	}

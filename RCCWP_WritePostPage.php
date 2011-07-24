@@ -1108,7 +1108,7 @@ class RCCWP_WritePostPage  {
 		if( isset($mf_post_id) ){
 			$customFieldId = $customField->id;
 			$value = RCCWP_CustomField::GetCustomFieldValues(true, $mf_post_id, $customField->name, $groupCounter, $fieldCounter);
-			if(!(int)$customField->properties['hide-visual-editor']){
+			if( isset($customField->properties['hide-visual-editor']) && !(int)$customField->properties['hide-visual-editor']){
                           if( !RCCWP_Options::Get('dont-remove-tmce') ){
                             $value = apply_filters('the_editor_content', $value);
                           }
@@ -1117,11 +1117,11 @@ class RCCWP_WritePostPage  {
 			$value = "";
 		}
 
-    $value = apply_filters('mf_multiline_value',$value,$groupCounter,$fieldCounter);
+                $value = apply_filters('mf_multiline_value',$value,$groupCounter,$fieldCounter);
 		
 		$inputHeight = (int)$customField->properties['height'];
 		$inputWidth = (int)$customField->properties['width'];
-		$hideEditor = (int)$customField->properties['hide-visual-editor'];
+		$hideEditor = @(int)$customField->properties['hide-visual-editor'];
 		
 		if( isset( $customField->properties['strict-max-length'] ) && $customField->properties['strict-max-length'] == 1 ) {
 			$maxlength = ' maxlength="'. ($customField->properties['height'] * $customField->properties['width']) .'"';
@@ -1337,7 +1337,7 @@ if( isset( $customField->properties['strict-max-length'] ) && $customField->prop
 		}else{
 			$hidValue = '';
 		}
-		
+	
 		$filepath	= $inputName . '_filepath';
 		//The Image is required?
 		$requiredClass = "";
@@ -1347,10 +1347,8 @@ if( isset( $customField->properties['strict-max-length'] ) && $customField->prop
 		$value = "<img src='".MF_URI."images/noimage.jpg' id='{$imageThumbID}'/>";
 
 		if( !empty($hidValue)){
-			$path = PHPTHUMB."?src=".MF_FILES_URI;
-			$valueRelative = $hidValue;
-			$value  = $path.$hidValue."&w=150&h=120&zc=1";
-			$value  = "<img src='{$value}' id='{$imageThumbID}'/>";
+      $value = aux_image($hidValue,'w=150&h=120&zc=1');
+			$value = "<img src='{$value}' id='{$imageThumbID}'/>";
 		}
 ?>
 		<p 	class="error_msg_txt upload-msg" id="upload_progress_<?php echo $idField;?>" style="display:none;">
